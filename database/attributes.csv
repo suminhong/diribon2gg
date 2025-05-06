@@ -1,6 +1,6 @@
-name_en,name_kr,icon_url
-None,없음,
-Data,데이터,
-Vaccine,백신,
-Virus,바이러스,
-Unknown,알수없음,
+name_en,name_kr
+None,없음
+Data,데이터
+Vaccine,백신
+Virus,바이러스
+Unknown,알수없음
