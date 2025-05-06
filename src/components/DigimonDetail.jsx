@@ -57,21 +57,7 @@ function DigimonDetail() {
 
   return (
     <Container>
-      <DigimonInfo>
-        <DigimonImage
-          src={getDigimonImageUrl(digimon.name_en)}
-          alt={digimon.name_en}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = '/placeholder.png';
-          }}
-        />
-        <DigimonName>{digimon.name_kr}</DigimonName>
-        <DigimonNameEn>{digimon.name_en}</DigimonNameEn>
-      </DigimonInfo>
-
       <EvolutionSection>
-        <h2>⬆️ Evolution From</h2>
         <EvolutionGrid>
           {evolutions.from.map(evolution => (
             <EvolutionCard key={evolution.id} to={`/digimon/${evolution.id}`}>
@@ -84,14 +70,26 @@ function DigimonDetail() {
                 }}
               />
               <EvolutionInfo>
-                <EvolutionName>{evolution.name_kr}</EvolutionName>
-                <DigimonNameEn>{evolution.name_en}</DigimonNameEn>
+                <EvolutionName>{evolution.name_kr} ({evolution.name_en})</EvolutionName>
               </EvolutionInfo>
             </EvolutionCard>
           ))}
           {evolutions.from.length === 0 && <p>No evolutions found</p>}
         </EvolutionGrid>
+        <h2>⬇️ Evolution From</h2>
       </EvolutionSection>
+      
+      <DigimonInfo>
+        <DigimonImage
+          src={getDigimonImageUrl(digimon.name_en)}
+          alt={digimon.name_en}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/placeholder.png';
+          }}
+        />
+        <DigimonName>{digimon.name_kr} ({digimon.name_en})</DigimonName>
+      </DigimonInfo>
 
       <EvolutionSection>
         <h2>⬇️ Evolution To</h2>
@@ -107,8 +105,7 @@ function DigimonDetail() {
                 }}
               />
               <EvolutionInfo>
-                <EvolutionName>{evolution.name_kr}</EvolutionName>
-                <DigimonNameEn>{evolution.name_en}</DigimonNameEn>
+                <EvolutionName>{evolution.name_kr} ({evolution.name_en})</EvolutionName>
               </EvolutionInfo>
             </EvolutionCard>
           ))}
