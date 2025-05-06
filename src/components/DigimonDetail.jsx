@@ -8,12 +8,35 @@ function DigimonDetail() {
   const { id } = useParams()
   const [digimon, setDigimon] = useState(null)
   const [evolutions, setEvolutions] = useState(null)
+  const [stages, setStages] = useState(null)
+  const [elements, setElements] = useState(null)
+  const [attributes, setAttributes] = useState(null)
+  const [species, setSpecies] = useState(null)
 
   useEffect(() => {
     fetchDigimonData()
   }, [id])
 
   const fetchDigimonData = async () => {
+    // Fetch metadata
+    const [stagesRes, elementsRes, attributesRes, speciesRes] = await Promise.all([
+      fetch('https://raw.githubusercontent.com/suminhong/diribon2gg/main/database/stages.csv'),
+      fetch('https://raw.githubusercontent.com/suminhong/diribon2gg/main/database/elements.csv'),
+      fetch('https://raw.githubusercontent.com/suminhong/diribon2gg/main/database/attributes.csv'),
+      fetch('https://raw.githubusercontent.com/suminhong/diribon2gg/main/database/species.csv')
+    ])
+
+    const [stagesText, elementsText, attributesText, speciesText] = await Promise.all([
+      stagesRes.text(),
+      elementsRes.text(),
+      attributesRes.text(),
+      speciesRes.text()
+    ])
+
+    setStages(parseCsv(stagesText))
+    setElements(parseCsv(elementsText))
+    setAttributes(parseCsv(attributesText))
+    setSpecies(parseCsv(speciesText))
     if (!id) {
       console.error('No digimon ID provided');
       return;
@@ -53,7 +76,12 @@ function DigimonDetail() {
     }
   }
 
-  if (!digimon || !evolutions) return <div>Loading...</div>
+  if (!digimon || !evolutions || !stages || !elements || !attributes || !species) return <div>Loading...</div>
+
+  const stage = stages.find(s => s.name_en === digimon.stage)
+  const element = elements.find(e => e.name_en === digimon.element)
+  const attribute = attributes.find(a => a.name_en === digimon.attribute)
+  const specie = species.find(s => s.name_en === digimon.species)
 
   return (
     <Container>
@@ -76,23 +104,33 @@ function DigimonDetail() {
           ))}
           {evolutions.from.length === 0 && <p>No evolutions found</p>}
         </EvolutionGrid>
-        <h2>⬇️ Evolution From</h2>
+        <SectionTitle>⬇️ Evolution From</SectionTitle>
       </EvolutionSection>
       
       <DigimonInfo>
-        <DigimonImage
-          src={getDigimonImageUrl(digimon.name_en)}
-          alt={digimon.name_en}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = '/placeholder.png';
-          }}
-        />
-        <DigimonName>{digimon.name_kr} ({digimon.name_en})</DigimonName>
+        <DigimonImageSection>
+          <DigimonImage
+            src={getDigimonImageUrl(digimon.name_en)}
+            alt={digimon.name_en}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = '/placeholder.png';
+            }}
+          />
+        </DigimonImageSection>
+        <DigimonDetailsSection>
+          <DigimonName>{digimon.name_kr} ({digimon.name_en})</DigimonName>
+          <BadgeContainer>
+            {stage && <Badge style={{ backgroundColor: stage.color, color: '#000' }}>{stage.name_kr}({stage.name_en})</Badge>}
+            {element && <Badge style={{ backgroundColor: element.color, color: '#fff' }}>{element.name_kr}({element.name_en}) 속성</Badge>}
+            {attribute && <Badge>{attribute.name_kr}({attribute.name_en}) 타입</Badge>}
+            {specie && <Badge>{specie.name_kr}({specie.name_en})</Badge>}
+          </BadgeContainer>
+        </DigimonDetailsSection>
       </DigimonInfo>
 
+      <SectionTitle>⬇️ Evolution To</SectionTitle>
       <EvolutionSection>
-        <h2>⬇️ Evolution To</h2>
         <EvolutionGrid>
           {evolutions.to.map(evolution => (
             <EvolutionCard key={evolution.id} to={`/digimon/${evolution.id}`}>
@@ -122,9 +160,40 @@ const Container = styled.div`
 
 const DigimonInfo = styled.div`
   display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+`
+
+const DigimonImageSection = styled.div`
+  flex: 0 0 auto;
+`
+
+const DigimonDetailsSection = styled.div`
+  flex: 1;
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 2rem;
+  gap: 1rem;
+`
+
+const BadgeContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+`
+
+const Badge = styled.span`
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background-color: #f3f4f6;
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+`
+
+const SectionTitle = styled.h2`
+  text-align: left;
+  margin: 2rem 0 1rem;
 `
 
 const DigimonImage = styled.img`
@@ -134,6 +203,7 @@ const DigimonImage = styled.img`
 `
 
 const DigimonName = styled.h1`
+  text-align: left;
   margin: 1rem 0 0.5rem;
   font-size: 2rem;
   color: #333;
