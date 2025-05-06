@@ -4,6 +4,14 @@ import styled from '@emotion/styled'
 import { getDigimonImageUrl } from '../utils/imageUtils'
 import { parseCsv } from '../utils/csvUtils'
 
+const formatDigimonNameForUrl = (name) => {
+  return name
+    .toLowerCase() // 소문자로 변경
+    .replace(/[^a-z0-9\s-]/g, '') // 특수문자 제거 (하이픈 제외)
+    .replace(/\s+/g, '-') // 띄어쓰기를 하이픈으로 대체
+    .trim() // 앞뒤 공백 제거
+}
+
 function DigimonDetail() {
   const { id } = useParams()
   const [digimon, setDigimon] = useState(null)
@@ -16,6 +24,13 @@ function DigimonDetail() {
   useEffect(() => {
     fetchDigimonData()
   }, [id])
+
+  const getEvolutionRequirements = (fromDigimon, toDigimon, evolutionsData) => {
+    const evolution = evolutionsData.find(e => 
+      e.from === fromDigimon && e.to === toDigimon
+    )
+    return evolution?.requirements || []
+  }
 
   const fetchDigimonData = async () => {
     // Fetch metadata
@@ -62,13 +77,19 @@ function DigimonDetail() {
       // Find evolutions from and to
       const from = evolutionsData
         .filter(e => e.to === currentDigimon.name_en)
-        .map(e => digimons.find(d => d.name_en === e.from))
-        .filter(Boolean)
+        .map(e => ({
+          digimon: digimons.find(d => d.name_en === e.from),
+          requirements: e.requirements || []
+        }))
+        .filter(e => e.digimon)
 
       const to = evolutionsData
         .filter(e => e.from === currentDigimon.name_en)
-        .map(e => digimons.find(d => d.name_en === e.to))
-        .filter(Boolean)
+        .map(e => ({
+          digimon: digimons.find(d => d.name_en === e.to),
+          requirements: e.requirements || []
+        }))
+        .filter(e => e.digimon)
 
       setEvolutions({ from, to })
     } catch (error) {
@@ -87,18 +108,23 @@ function DigimonDetail() {
     <Container>
       <EvolutionSection>
         <EvolutionGrid>
-          {evolutions.from.map(evolution => (
-            <EvolutionCard key={evolution.id} to={`/digimon/${evolution.id}`}>
+          {evolutions.from.map(({ digimon, requirements }) => (
+            <EvolutionCard key={digimon.id} to={`/digimon/${digimon.id}`}>
               <EvolutionImage
-                src={getDigimonImageUrl(evolution.name_en)}
-                alt={evolution.name_en}
+                src={getDigimonImageUrl(digimon.name_en)}
+                alt={digimon.name_en}
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = '/placeholder.png';
                 }}
               />
               <EvolutionInfo>
-                <EvolutionName>{evolution.name_kr} ({evolution.name_en})</EvolutionName>
+                <EvolutionName>{digimon.name_kr} ({digimon.name_en})</EvolutionName>
+                <Requirements>
+                  {requirements.map((req, index) => (
+                    <Requirement key={index}>{req}</Requirement>
+                  ))}
+                </Requirements>
               </EvolutionInfo>
             </EvolutionCard>
           ))}
@@ -126,24 +152,41 @@ function DigimonDetail() {
             {attribute && <Badge>{attribute.name_kr}({attribute.name_en}) 타입</Badge>}
             {specie && <Badge>{specie.name_kr}({specie.name_en})</Badge>}
           </BadgeContainer>
+          <GrindosourLink 
+            href={`https://www.grindosaur.com/en/games/digital-tamers-2/digimon/${formatDigimonNameForUrl(digimon.name_en)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img 
+              src="https://www.grindosaur.com/img/brand/assets/grindosaur-brand-name.svg" 
+              alt="Grindosaur" 
+              style={{ height: '0.875rem' }}
+            />
+            에서 보기 🚀
+          </GrindosourLink>
         </DigimonDetailsSection>
       </DigimonInfo>
 
       <SectionTitle>⬇️ Evolution To</SectionTitle>
       <EvolutionSection>
         <EvolutionGrid>
-          {evolutions.to.map(evolution => (
-            <EvolutionCard key={evolution.id} to={`/digimon/${evolution.id}`}>
+          {evolutions.to.map(({ digimon, requirements }) => (
+            <EvolutionCard key={digimon.id} to={`/digimon/${digimon.id}`}>
               <EvolutionImage
-                src={getDigimonImageUrl(evolution.name_en)}
-                alt={evolution.name_en}
+                src={getDigimonImageUrl(digimon.name_en)}
+                alt={digimon.name_en}
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = '/placeholder.png';
                 }}
               />
               <EvolutionInfo>
-                <EvolutionName>{evolution.name_kr} ({evolution.name_en})</EvolutionName>
+                <EvolutionName>{digimon.name_kr} ({digimon.name_en})</EvolutionName>
+                <Requirements>
+                  {requirements.map((req, index) => (
+                    <Requirement key={index}>{req}</Requirement>
+                  ))}
+                </Requirements>
               </EvolutionInfo>
             </EvolutionCard>
           ))}
@@ -250,11 +293,9 @@ const EvolutionImage = styled.img`
 const EvolutionInfo = styled.div`
   margin-left: 1rem;
   flex: 1;
-`
-
-const EvolutionName = styled.h3`
-  margin: 0 0 0.5rem;
-  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `
 
 const Requirements = styled.div`
@@ -264,8 +305,38 @@ const Requirements = styled.div`
 `
 
 const Requirement = styled.span`
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: #666;
+`
+
+const EvolutionName = styled.h3`
+  margin: 0;
+  font-size: 1rem;
+  color: #1f2937;
+`
+
+const GrindosourLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 1rem;
+  background-color:rgb(229, 147, 70);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  img {
+    filter: brightness(0) invert(1);
+  }
+
+  &:hover {
+    background-color: #4338ca;
+    transform: translateY(-1px);
+  }
 `
 
 export default DigimonDetail
