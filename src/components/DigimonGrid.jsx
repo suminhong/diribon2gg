@@ -30,6 +30,10 @@ function DigimonGrid() {
 
   return (
     <div>
+      <Citation>
+        본 사이트는 <StyledLink href="https://www.grindosaur.com/en/games/digital-tamers-2" target="_blank" rel="noopener noreferrer">Grindosaur 사이트</StyledLink>에서 정보를 가져와 직접 명칭들을 번역하고 조합해 만들어 졌습니다.<br />
+        제작자가 잘 모르는 부분이 많습니다. 틀린 부분 또는 개선할 점이 있다면 honglab97@gmail.com 으로 연락 주세요.
+      </Citation>
       <SearchInput
         type="text"
         placeholder="디지몬 검색 (한글/영어)"
@@ -55,6 +59,25 @@ function DigimonGrid() {
     </div>
   )
 }
+
+const StyledLink = styled.a`
+  color: #2196f3;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+const Citation = styled.blockquote`
+text-align: left;
+  background-color: #fffde7;
+  border-left: 4px solid #ffd54f;
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+`
 
 const SearchInput = styled.input`
   width: 100%;
