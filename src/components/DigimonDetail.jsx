@@ -130,7 +130,7 @@ function DigimonDetail() {
           ))}
           {evolutions.from.length === 0 && <p>No evolutions found</p>}
         </EvolutionGrid>
-        <SectionTitle>⬇️ Evolution From</SectionTitle>
+        <SectionTitle>⬇️ Evolution</SectionTitle>
       </EvolutionSection>
       
       <DigimonInfo>
@@ -149,7 +149,7 @@ function DigimonDetail() {
           <BadgeContainer>
             {stage && <Badge style={{ backgroundColor: stage.color, color: '#000' }}>{stage.name_kr}({stage.name_en})</Badge>}
             {element && <Badge style={{ backgroundColor: element.color, color: '#fff' }}>{element.name_kr}({element.name_en}) 속성</Badge>}
-            {attribute && <Badge>{attribute.name_kr}({attribute.name_en}) 타입</Badge>}
+            {attribute && <Badge style={{ backgroundColor: attribute.color, color: '#fff' }}>{attribute.name_kr}({attribute.name_en}) 타입</Badge>}
             {specie && <Badge>{specie.name_kr}({specie.name_en})</Badge>}
           </BadgeContainer>
           <GrindosourLink 
@@ -167,7 +167,7 @@ function DigimonDetail() {
         </DigimonDetailsSection>
       </DigimonInfo>
 
-      <SectionTitle>⬇️ Evolution To</SectionTitle>
+      <SectionTitle>⬇️ Evolution</SectionTitle>
       <EvolutionSection>
         <EvolutionGrid>
           {evolutions.to.map(({ digimon, requirements }) => (

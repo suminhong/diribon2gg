@@ -5,7 +5,7 @@ function Header() {
   return (
     <HeaderContainer>
       <Link to="/">
-        <Logo>디리본2 진화도감 by 홍해장</Logo>
+        <Logo>디리본2 진화도감</Logo>
       </Link>
       <GithubLink href="https://github.com/suminhong/diribon2gg" target="_blank" rel="noopener noreferrer">
         Github
