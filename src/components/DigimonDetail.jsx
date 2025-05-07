@@ -153,7 +153,7 @@ function DigimonDetail() {
             {specie && <Badge>{specie.name_kr}({specie.name_en})</Badge>}
           </BadgeContainer>
           <GrindosourLink 
-            href={`https://www.grindosaur.com/en/games/digital-tamers-2/digimon/${formatDigimonNameForUrl(digimon.name_en)}`}
+            href={`https://www.grindosaur.com/en/games/digital-tamers-2/${digimon.stage === 'DigiTama' ? 'digitama' : 'digimon'}/${formatDigimonNameForUrl(digimon.name_en)}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -319,23 +319,22 @@ const GrindosourLink = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.375rem 0.75rem;
   margin-bottom: 1rem;
-  background-color:rgb(229, 147, 70);
-  color: white;
+  color: #2563eb;
   text-decoration: none;
-  border-radius: 0.375rem;
   font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.2s;
 
   img {
-    filter: brightness(0) invert(1);
+    filter: invert(37%) sepia(74%) saturate(1909%) hue-rotate(211deg) brightness(97%) contrast(101%);
   }
 
   &:hover {
-    background-color: #4338ca;
-    transform: translateY(-1px);
+    color: #1d4ed8;
+    img {
+      filter: invert(23%) sepia(92%) saturate(1861%) hue-rotate(221deg) brightness(94%) contrast(101%);
+    }
   }
 `
 
