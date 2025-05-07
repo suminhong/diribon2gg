@@ -1,5 +1,10 @@
 [
   {
+    "from": "First DigiTama",
+    "to": "Ukkomon",
+    "requirements": []
+  },
+  {
     "from": "Regular DigiTama",
     "to": "Botamon",
     "requirements": []
