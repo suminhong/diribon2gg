@@ -368,6 +368,13 @@ const ControlsRow = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `
 
 const SearchInput = styled.input`
@@ -382,7 +389,12 @@ const SearchInput = styled.input`
 const SortButtons = styled.div`
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: space-between;
+  }
 `
 
 const SortButton = styled.button`
@@ -401,11 +413,21 @@ const SortButton = styled.button`
 const FilterSection = styled.div`
   display: flex;
   gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `
 
 const FilterDropdowns = styled.div`
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: space-between;
+  }
 `
 
 const FilterGroup = styled.div`
@@ -421,9 +443,15 @@ const FilterButton = styled.button`
   color: #374151;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
 
   &:hover {
     background-color: #f3f4f6;
+  }
+
+  @media (max-width: 768px) {
+    flex: 1;
+    min-width: calc(50% - 0.25rem);
   }
 `
 
@@ -439,6 +467,17 @@ const DropdownMenu = styled.div`
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 480px) {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
 `
 
 const SelectAllItem = styled.button`
@@ -509,8 +548,13 @@ const Checkbox = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
 `
 
 const DigimonCard = styled(Link)`
@@ -528,18 +572,34 @@ const DigimonCard = styled(Link)`
     transform: translateY(-2px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
+
+  @media (max-width: 480px) {
+    padding: 0.75rem;
+  }
 `
 
 const DigimonImage = styled.img`
   width: 100px;
   height: 100px;
   object-fit: contain;
+
+  @media (max-width: 480px) {
+    width: 80px;
+    height: 80px;
+  }
 `
 
 const DigimonName = styled.span`
   margin-top: 0.5rem;
   color: #333;
   text-align: center;
+  font-size: 0.875rem;
+  word-break: keep-all;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    font-size: 0.8125rem;
+  }
 `
 
 export default DigimonGrid

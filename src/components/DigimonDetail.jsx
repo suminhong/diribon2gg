@@ -199,16 +199,42 @@ function DigimonDetail() {
 
 const Container = styled.div`
   padding: 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `
 
 const DigimonInfo = styled.div`
   display: flex;
   gap: 2rem;
   margin: 2rem 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
 `
 
 const DigimonImageSection = styled.div`
   flex: 0 0 auto;
+
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+  }
+`
+
+const DigimonImage = styled.img`
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+
+  @media (max-width: 768px) {
+    width: 180px;
+    height: 180px;
+  }
 `
 
 const DigimonDetailsSection = styled.div`
@@ -216,12 +242,33 @@ const DigimonDetailsSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    text-align: center;
+  }
+`
+
+const DigimonName = styled.h1`
+  text-align: left;
+  margin: 1rem 0 0.5rem;
+  font-size: 2rem;
+  color: #333;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    font-size: 1.75rem;
+  }
 `
 
 const BadgeContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `
 
 const Badge = styled.span`
@@ -234,33 +281,21 @@ const Badge = styled.span`
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 `
 
-const SectionTitle = styled.h2`
-  text-align: left;
-  margin: 2rem 0 1rem;
-`
-
-const DigimonImage = styled.img`
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-`
-
-const DigimonName = styled.h1`
-  text-align: left;
-  margin: 1rem 0 0.5rem;
+const SectionTitle = styled.h1`
   font-size: 2rem;
-  color: #333;
-`
+  margin: 0 0 1rem 0;
+  color: #111827;
 
-const DigimonNameEn = styled.h2`
-  margin: 0;
-  font-size: 1.2rem;
-  color: #666;
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `
 
 const EvolutionSection = styled.section`
-  h2 {
-    margin-bottom: 1rem;
+  margin: 2rem 0;
+
+  @media (max-width: 768px) {
+    margin: 1.5rem 0;
   }
 `
 
