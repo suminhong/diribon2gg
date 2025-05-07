@@ -5,6 +5,8 @@ import { getDigimonImageUrl } from '../utils/imageUtils'
 import { parseCsv } from '../utils/csvUtils'
 
 const SORT_TYPES = {
+  STAGE_ASC: 'stage_asc',
+  STAGE_DESC: 'stage_desc',
   KR_ASC: 'kr_asc',
   KR_DESC: 'kr_desc',
   EN_ASC: 'en_asc',
@@ -14,7 +16,7 @@ const SORT_TYPES = {
 function DigimonGrid() {
   const [digimons, setDigimons] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [sortType, setSortType] = useState(SORT_TYPES.KR_ASC)
+  const [sortType, setSortType] = useState(SORT_TYPES.STAGE_ASC)
   const [selectedStages, setSelectedStages] = useState(new Set())
   const [selectedSpecies, setSelectedSpecies] = useState(new Set())
   const [selectedElements, setSelectedElements] = useState(new Set())
@@ -82,7 +84,9 @@ function DigimonGrid() {
   }
 
   const handleSortClick = (type) => {
-    if (type === 'kr') {
+    if (type === 'stage') {
+      setSortType(sortType === SORT_TYPES.STAGE_ASC ? SORT_TYPES.STAGE_DESC : SORT_TYPES.STAGE_ASC)
+    } else if (type === 'kr') {
       setSortType(sortType === SORT_TYPES.KR_ASC ? SORT_TYPES.KR_DESC : SORT_TYPES.KR_ASC)
     } else if (type === 'en') {
       setSortType(sortType === SORT_TYPES.EN_ASC ? SORT_TYPES.EN_DESC : SORT_TYPES.EN_ASC)
@@ -122,7 +126,18 @@ function DigimonGrid() {
       return matchesSearch && matchesStages && matchesSpecies && matchesElements && matchesAttributes
     })
     .sort((a, b) => {
+      const stageOrder = metadata.stages.reduce((acc, stage, index) => {
+        acc[stage.name_en] = index;
+        return acc;
+      }, {});
+
       switch (sortType) {
+        case SORT_TYPES.STAGE_ASC:
+          const stageCompare = (stageOrder[a.stage] || 0) - (stageOrder[b.stage] || 0);
+          return stageCompare === 0 ? (a.name_kr || '').localeCompare(b.name_kr || '') : stageCompare;
+        case SORT_TYPES.STAGE_DESC:
+          const stageCompareDesc = (stageOrder[b.stage] || 0) - (stageOrder[a.stage] || 0);
+          return stageCompareDesc === 0 ? (a.name_kr || '').localeCompare(b.name_kr || '') : stageCompareDesc;
         case SORT_TYPES.KR_ASC:
           return (a.name_kr || '').localeCompare(b.name_kr || '')
         case SORT_TYPES.KR_DESC:
@@ -151,22 +166,28 @@ function DigimonGrid() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         
-        <SortButtons>
-          <SortButton 
-            onClick={() => handleSortClick('kr')}
-            active={sortType === SORT_TYPES.KR_ASC || sortType === SORT_TYPES.KR_DESC}
-          >
-            가나다순 {sortType === SORT_TYPES.KR_ASC ? '↓' : '↑'}
-          </SortButton>
-          <SortButton 
-            onClick={() => handleSortClick('en')}
-            active={sortType === SORT_TYPES.EN_ASC || sortType === SORT_TYPES.EN_DESC}
-          >
-            알파벳순 {sortType === SORT_TYPES.EN_ASC ? '↓' : '↑'}
-          </SortButton>
-        </SortButtons>
-
-        <FilterSection>
+        <ControlsRow>
+          <SortButtons>
+            <SortButton 
+              onClick={() => handleSortClick('stage')}
+              active={sortType === SORT_TYPES.STAGE_ASC || sortType === SORT_TYPES.STAGE_DESC}
+            >
+              스테이지순 {sortType === SORT_TYPES.STAGE_ASC ? '↓' : '↑'}
+            </SortButton>
+            <SortButton 
+              onClick={() => handleSortClick('kr')}
+              active={sortType === SORT_TYPES.KR_ASC || sortType === SORT_TYPES.KR_DESC}
+            >
+              가나다순 {sortType === SORT_TYPES.KR_ASC ? '↓' : '↑'}
+            </SortButton>
+            <SortButton 
+              onClick={() => handleSortClick('en')}
+              active={sortType === SORT_TYPES.EN_ASC || sortType === SORT_TYPES.EN_DESC}
+            >
+              알파벳순 {sortType === SORT_TYPES.EN_ASC ? '↓' : '↑'}
+            </SortButton>
+          </SortButtons>
+          <FilterSection>
           <FilterDropdowns>
             <FilterGroup className="filter-group">
               <FilterButton 
@@ -281,6 +302,7 @@ function DigimonGrid() {
             </FilterGroup>
           </FilterDropdowns>
         </FilterSection>
+        </ControlsRow>
       </Controls>
       <Grid>
         {filteredDigimons.map((digimon, index) => (
@@ -325,6 +347,13 @@ const Controls = styled.div`
   margin-bottom: 2rem;
 `
 
+const ControlsRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+`
+
 const SearchInput = styled.input`
   width: 100%;
   padding: 0.8rem;
@@ -354,12 +383,12 @@ const SortButton = styled.button`
 `
 
 const FilterSection = styled.div`
-  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
 `
 
 const FilterDropdowns = styled.div`
   display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
 `
 
