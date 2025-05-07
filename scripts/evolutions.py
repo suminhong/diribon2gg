@@ -82,10 +82,31 @@ async def process_digimon(page, name_en):
         print(f'Error processing {name_en}: {str(e)}')
         return []
 
+async def process_single_digimon(digimon_name):
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        context = await browser.new_context(
+            viewport={'width': 1280, 'height': 720},
+            user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        )
+        page = await context.new_page()
+        
+        try:
+            evolution_data = await process_digimon(page, digimon_name)
+            return evolution_data
+        finally:
+            await browser.close()
+
 async def main():
-    # Read all digimons from CSV
+    # Check if a specific digimon name was provided
+    if len(sys.argv) > 1:
+        digimon_name = sys.argv[1]
+        await process_single_digimon(digimon_name)
+        return
+
+    # If no digimon name provided, process all digimons
     digimons = []
-    with open('../database/digimons.csv', 'r') as f:
+    with open('./database/digimons.csv', 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
             digimons.append(row['name_en'])
@@ -110,7 +131,7 @@ async def main():
                     # Save progress every 10 Digimon
                     if i % 10 == 0:
                         print(f"Saving progress... ({i}/{len(digimons)})")
-                        with open('../database/evolutions.json', 'w', encoding='utf-8') as f:
+                        with open('./database/evolutions.json', 'w', encoding='utf-8') as f:
                             json.dump(all_evolution_data, f, ensure_ascii=False, indent=2)
                     # Add a small delay to avoid overwhelming the server
                     await asyncio.sleep(1)
@@ -124,7 +145,7 @@ async def main():
         finally:
             # Save final results
             print("\nSaving final results...")
-            with open('../database/evolutions.json', 'w', encoding='utf-8') as f:
+            with open('./database/evolutions.json', 'w', encoding='utf-8') as f:
                 json.dump(all_evolution_data, f, ensure_ascii=False, indent=2)
             print(f"Saved {len(all_evolution_data)} evolution entries to evolutions.json")
             await browser.close()
