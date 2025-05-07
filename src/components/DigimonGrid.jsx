@@ -29,6 +29,18 @@ function DigimonGrid() {
     attributes: []
   })
 
+  const getStageColor = (stageName) => {
+    const stage = metadata.stages.find(s => s.name_en === stageName)
+    if (!stage) return 'transparent'
+    // Convert hex to rgba with 0.15 opacity
+    if (stage.color === 'white') return 'rgba(255, 255, 255, 0.5)'
+    const hex = stage.color.replace('#', '')
+    const r = parseInt(hex.substring(0, 2), 16)
+    const g = parseInt(hex.substring(2, 4), 16)
+    const b = parseInt(hex.substring(4, 6), 16)
+    return `rgba(${r}, ${g}, ${b}, 0.15)`
+  }
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (openDropdown && !event.target.closest('.filter-group')) {
@@ -306,7 +318,11 @@ function DigimonGrid() {
       </Controls>
       <Grid>
         {filteredDigimons.map((digimon, index) => (
-          <DigimonCard key={digimon.id || index} to={`/digimon/${digimon.id || ''}`}>
+          <DigimonCard 
+            key={digimon.id || index} 
+            to={`/digimon/${digimon.id || ''}`}
+            backgroundColor={getStageColor(digimon.stage)}
+          >
             <DigimonImage
               src={getDigimonImageUrl(digimon.name_en)}
               alt={digimon.name_en}
@@ -505,7 +521,8 @@ const DigimonCard = styled(Link)`
   border: 1px solid #eee;
   border-radius: 8px;
   text-decoration: none;
-  transition: transform 0.2s;
+  transition: all 0.2s;
+  background-color: ${props => props.backgroundColor};
 
   &:hover {
     transform: translateY(-2px);
