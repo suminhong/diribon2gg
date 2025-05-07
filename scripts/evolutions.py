@@ -6,7 +6,7 @@ from playwright.async_api import async_playwright
 import re
 import json
 
-async def process_digimon(page, name_en):
+async def process_digimon(page, name_en, stage=None):
     # Clean up name_en
     clean_name = re.sub(r'[^a-zA-Z0-9\s-]', '', name_en)  # Remove special characters
     clean_name = clean_name.lower()  # Convert to lowercase
@@ -19,7 +19,59 @@ async def process_digimon(page, name_en):
         await page.goto(url, wait_until='networkidle')
         await page.wait_for_selector('.box', state='attached', timeout=60000)
         
-        # Get evolution data using JavaScript
+        # For Baby I stage, get hatching information instead of evolution data
+        if stage == 'Baby I':
+            hatching_data = await page.evaluate('''
+                () => {
+                    const data = [];
+                    
+                    // Find hatching information box
+                    const boxes = Array.from(document.querySelectorAll('.box'));
+                    const hatchBox = boxes.find(box => {
+                        const caption = box.querySelector('caption');
+                        return caption && caption.textContent.includes('can hatch from');
+                    });
+                    
+                    if (!hatchBox) return data;
+                    
+                    // Process each digitama row
+                    const rows = hatchBox.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const nameCell = row.querySelector('td:nth-child(2)');
+                        if (!nameCell) return;
+                        
+                        const nameLink = nameCell.querySelector('a');
+                        if (!nameLink) return;
+                        
+                        const digitamaName = nameLink.textContent.trim();
+                        data.push({
+                            from: digitamaName,
+                            requirements: []
+                        });
+                    });
+                    
+                    return data;
+                }
+            ''')
+            
+            # Format the hatching data
+            formatted_data = []
+            for entry in hatching_data:
+                formatted_entry = {
+                    "from": entry["from"],
+                    "to": name_en,
+                    "requirements": entry["requirements"]
+                }
+                formatted_data.append(formatted_entry)
+            
+            # Print the results
+            print("\nHatching data for", name_en)
+            print("-" * 50)
+            print(json.dumps(formatted_data, ensure_ascii=False, indent=2))
+            
+            return formatted_data
+        
+        # For other stages, get evolution data as before
         evolution_data = await page.evaluate('''
             () => {
                 const data = [];
@@ -83,6 +135,15 @@ async def process_digimon(page, name_en):
         return []
 
 async def process_single_digimon(digimon_name):
+    # Read digimon stage from CSV
+    stage = None
+    with open('./database/digimons.csv', 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row['name_en'] == digimon_name:
+                stage = row['stage']
+                break
+    
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         context = await browser.new_context(
@@ -92,7 +153,7 @@ async def process_single_digimon(digimon_name):
         page = await context.new_page()
         
         try:
-            evolution_data = await process_digimon(page, digimon_name)
+            evolution_data = await process_digimon(page, digimon_name, stage)
             return evolution_data
         finally:
             await browser.close()
@@ -106,10 +167,12 @@ async def main():
 
     # If no digimon name provided, process all digimons
     digimons = []
+    stages = {}
     with open('./database/digimons.csv', 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
             digimons.append(row['name_en'])
+            stages[row['name_en']] = row['stage']
     
     print(f"Found {len(digimons)} Digimon to process")
     all_evolution_data = []
@@ -126,7 +189,7 @@ async def main():
             for i, digimon in enumerate(digimons, 1):
                 print(f"\nProcessing {i}/{len(digimons)}: {digimon}")
                 try:
-                    evolution_data = await process_digimon(page, digimon)
+                    evolution_data = await process_digimon(page, digimon, stages.get(digimon))
                     all_evolution_data.extend(evolution_data)
                     # Save progress every 10 Digimon
                     if i % 10 == 0:

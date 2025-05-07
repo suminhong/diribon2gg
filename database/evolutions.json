@@ -1,5 +1,245 @@
 [
   {
+    "from": "Regular DigiTama",
+    "to": "Botamon",
+    "requirements": []
+  },
+  {
+    "from": "Dragon DigiTama",
+    "to": "Botamon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Bubbmon",
+    "requirements": []
+  },
+  {
+    "from": "Insect DigiTama",
+    "to": "Bubbmon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Chicomon",
+    "requirements": []
+  },
+  {
+    "from": "Dragon DigiTama",
+    "to": "Chicomon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Cocomon",
+    "requirements": []
+  },
+  {
+    "from": "Dark DigiTama",
+    "to": "Cocomon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Dodomon",
+    "requirements": []
+  },
+  {
+    "from": "Beast DigiTama",
+    "to": "Dodomon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Jyarimon",
+    "requirements": []
+  },
+  {
+    "from": "Dragon DigiTama",
+    "to": "Jyarimon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Kuramon",
+    "requirements": []
+  },
+  {
+    "from": "Dark DigiTama",
+    "to": "Kuramon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Leafmon",
+    "requirements": []
+  },
+  {
+    "from": "Insect DigiTama",
+    "to": "Leafmon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "MetalKoromon",
+    "requirements": []
+  },
+  {
+    "from": "Machine DigiTama",
+    "to": "MetalKoromon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Mokumon",
+    "requirements": []
+  },
+  {
+    "from": "Machine DigiTama",
+    "to": "Mokumon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Nyokimon",
+    "requirements": []
+  },
+  {
+    "from": "Plant DigiTama",
+    "to": "Nyokimon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Petitmon",
+    "requirements": []
+  },
+  {
+    "from": "Dragon DigiTama",
+    "to": "Petitmon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Pitchmon",
+    "requirements": []
+  },
+  {
+    "from": "Aquatic DigiTama",
+    "to": "Pitchmon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Poyomon",
+    "requirements": []
+  },
+  {
+    "from": "Aquatic DigiTama",
+    "to": "Poyomon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Punimon",
+    "requirements": []
+  },
+  {
+    "from": "Beast DigiTama",
+    "to": "Punimon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Pururumon",
+    "requirements": []
+  },
+  {
+    "from": "Bird DigiTama",
+    "to": "Pururumon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Puttimon",
+    "requirements": []
+  },
+  {
+    "from": "Holy DigiTama",
+    "to": "Puttimon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Puwamon",
+    "requirements": []
+  },
+  {
+    "from": "Bird DigiTama",
+    "to": "Puwamon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Relemon",
+    "requirements": []
+  },
+  {
+    "from": "Beast DigiTama",
+    "to": "Relemon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Tsubumon",
+    "requirements": []
+  },
+  {
+    "from": "Beast DigiTama",
+    "to": "Tsubumon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "YukimiBotamon",
+    "requirements": []
+  },
+  {
+    "from": "Aquatic DigiTama",
+    "to": "YukimiBotamon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Yuramon",
+    "requirements": []
+  },
+  {
+    "from": "Plant DigiTama",
+    "to": "Yuramon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Zerimon",
+    "requirements": []
+  },
+  {
+    "from": "Beast DigiTama",
+    "to": "Zerimon",
+    "requirements": []
+  },
+  {
+    "from": "Regular DigiTama",
+    "to": "Zurumon",
+    "requirements": []
+  },
+  {
+    "from": "Machine DigiTama",
+    "to": "Zurumon",
+    "requirements": []
+  },
+  {
     "from": "Petitmon",
     "to": "Babydmon",
     "requirements": [
