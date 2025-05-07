@@ -1,12 +1,12 @@
 name_en,name_kr,color
-Wood,나무,green
-Wind,바람,skyblue
-Water,물,blue
-Thunder,번개,orange
-Steel,강철,gray
-Pitch Black,어둠,purple
-Neutral,노말,black
-Light,빛,yellow
-Ice,얼음,lightblue
-Fire,화염,red
-Earth,땅,brown
+Wood,나무,#00a400
+Wind,바람,#9ec4fc
+Water,물,#0061ff
+Thunder,번개,#ffaa00
+Steel,강철,#a5a5a4
+Pitch Black,어둠,#7600b1
+Neutral,노말,#5b5b5b
+Light,빛,#fde967
+Ice,얼음,#b3f6ff
+Fire,화염,#c20e1a
+Earth,땅,#9c6a00

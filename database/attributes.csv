@@ -1,6 +1,6 @@
-name_en,name_kr
-None,없음
-Data,데이터
-Vaccine,백신
-Virus,바이러스
-Unknown,알수없음
+name_en,name_kr,color
+None,없음,#ffec00
+Data,데이터,#406eba
+Vaccine,백신,#4f9300
+Virus,바이러스,#c20d1c
+Unknown,알수없음,#000000
