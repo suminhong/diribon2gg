@@ -41,7 +41,7 @@ jobs:
 
       # ECR 생성 또는 업데이트
       - name: Create or Update ECR Repo
-        uses: MarryMeAI/cicd-action/ecr-create@main
+        uses: MarryMeAI/cicd/ecr-create@main
         with:
           ecr_repository: ${{ env.ECR_REPOSITORY }}
 
@@ -68,13 +68,13 @@ jobs:
       - name: Get Head Commit Title
         run: echo "commit_title=$(git log --format=%B -n 1 HEAD | head -n 1)" >> $GITHUB_ENV
 
-      # ArgoCD 배포 트리거 실행
-      - name: CD-Trigger
-        uses: MarryMeAI/cicd-action/cd-trigger@main
-        with:
-          app_path: ${{ env.ECR_REPOSITORY }}
-          phase: ${{ env.PHASE }}
-          ecr_repository: ${{ env.ECR_REPOSITORY }}
-          image_tag: ${{ env.image_tag }}
-          pusher_name: ${{ github.event.sender.login }}
-          head_commit: ${{ env.commit_title }}
+    #   # ArgoCD 배포 트리거 실행
+    #   - name: CD-Trigger
+    #     uses: MarryMeAI/cicd-action/cd-trigger@main
+    #     with:
+    #       app_path: ${{ env.ECR_REPOSITORY }}
+    #       phase: ${{ env.PHASE }}
+    #       ecr_repository: ${{ env.ECR_REPOSITORY }}
+    #       image_tag: ${{ env.image_tag }}
+    #       pusher_name: ${{ github.event.sender.login }}
+    #       head_commit: ${{ env.commit_title }}
