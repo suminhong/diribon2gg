@@ -13,7 +13,7 @@ env:
   PHASE: prod
   APP_NAME: diribon2gg
   AWS_REGION: ap-northeast-2
-  AWS_ROLE: arn:aws:iam::881490123244:role/github-cicd-marrymeai
+  AWS_ROLE: arn:aws:iam::881490123244:role/github-cicd-suminhong
   ECR_REPOSITORY: suminhong/diribon2gg
   ECR_REGISTRY: 881490123244.dkr.ecr.ap-northeast-2.amazonaws.com
   GITHUB_USERNAME: ${{ secrets.GH_ACTOR }}
